@@ -132,7 +132,7 @@ const HomePage = () => {
       {/* Footer */}
       <footer className="bg-gray-800 text-white py-8 mt-12">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-lg mb-2">Marketplace Alger © 2024</p>
+          <p className="text-lg mb-2">Marketplace Alger © 2026 -- Loubna Sellam</p>
           <p className="text-gray-400">
             Connectant producteurs et consommateurs pour une économie locale forte
           </p>
