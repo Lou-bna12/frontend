@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
@@ -20,15 +20,26 @@ const CheckoutPage = () => {
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [orderId, setOrderId] = useState(null);
 
-  // Si pas connecté ou panier vide, rediriger
-  if (!user) {
-    navigate('/login');
-    return null;
-  }
+  // Utiliser useEffect pour la redirection
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
 
-  if (cartItems.length === 0) {
-    navigate('/cart');
-    return null;
+    if (cartItems.length === 0) {
+      navigate('/cart');
+      return;
+    }
+  }, [user, cartItems, navigate]);
+
+  // Si pas connecté ou panier vide, afficher un chargement
+  if (!user || cartItems.length === 0) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="spinner"></div>
+      </div>
+    );
   }
 
   const handleSubmit = async (e) => {

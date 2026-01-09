@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { getProducts } from '../services/api'; // CHANGÉ ICI
+import { getProducts } from '../services/api';
 import ProductCard from '../components/Product/ProductCard';
 import Spinner from '../components/UI/Spinner';
-import Header from '../components/Layout/Header';
 
 const HomePage = () => {
   const [productList, setProductList] = useState([]);
@@ -18,7 +17,7 @@ const HomePage = () => {
   const loadProducts = async () => {
     try {
       setLoading(true);
-      const data = await getProducts( // CHANGÉ ICI
+      const data = await getProducts(
         selectedCategory === 'tous' ? null : selectedCategory
       );
       setProductList(data.products || []);
@@ -33,19 +32,21 @@ const HomePage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
+      {/* SUPPRIME CETTE LIGNE : <Header /> */}
       
       <main className="container mx-auto px-4 py-8">
         {/* Hero Section */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-800 mb-4">
-            Marketplace Alger 🇩🇿
+           ZamZam
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Achetez directement auprès des producteurs algériens.
             Produits frais, prix justes, livraison rapide.
           </p>
         </div>
+
+        {/* Le reste du code reste identique... */}
 
         {/* Catégories */}
         <div className="mb-8">

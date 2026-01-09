@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
+import Header from './components/Layout/Header';
+
 
 // Pages
 import HomePage from './pages/HomePage';
@@ -12,6 +14,7 @@ import CartPage from './pages/CartPage';
 import ShopDashboard from './pages/ShopDashboard';
 import CheckoutPage from './pages/CheckoutPage';
 import OrdersPage from './pages/OrdersPage';
+import NotificationsPage from './pages/NotificationsPage'
 
 function App() {
   const [apiStatus, setApiStatus] = useState('checking');
@@ -44,6 +47,9 @@ function App() {
               </div>
             )}
             
+            {/* Ajoute le Header ici */}
+            <Header />
+            
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/login" element={<LoginPage />} />
@@ -54,6 +60,7 @@ function App() {
               <Route path="*" element={<HomePage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/orders" element={<OrdersPage />} />
+              <Route path="/notifications" element={<NotificationsPage />} />
             </Routes>
           </div>
         </Router>

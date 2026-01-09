@@ -1,63 +1,166 @@
+// src/services/api.js - Version corrigée
 const API_URL = "http://localhost:8000";
 
-// Fonctions de base uniquement
-export const getProducts = async (category) => {
-  const url = category ? `${API_URL}/products?category=${category}` : `${API_URL}/products`;
-  const response = await fetch(url);
-  return response.json();
+// Helper function
+const fetchAPI = async (endpoint, options = {}) => {
+  const defaultOptions = {
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  };
+
+  try {
+    const response = await fetch(`${API_URL}${endpoint}`, {
+      ...defaultOptions,
+      ...options,
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({}));
+      throw new Error(error.detail || `HTTP ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('API Error:', error);
+    throw error;
+  }
 };
 
-export const getProductById = async (id) => {
-  const response = await fetch(`${API_URL}/products/${id}`);
-  return response.json();
-};
+// ===== FONCTIONS EXPORTÉES =====
 
-export const getShopProducts = async (ownerEmail) => {
-  const response = await fetch(`${API_URL}/shop/products?owner_email=${ownerEmail}`);
-  return response.json();
-};
-
-export const createShopProduct = async (productData, ownerEmail) => {
-  const response = await fetch(`${API_URL}/shop/products`, {
+// AUTH
+export const login = (email, password) => 
+  fetchAPI('/login', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ...productData, owner_email: ownerEmail })
+    body: JSON.stringify({ email, password }),
   });
-  return response.json();
-};
 
-export const login = async (email, password) => {
-  const response = await fetch(`${API_URL}/login`, {
+export const register = (userData) => 
+  fetchAPI('/register', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password })
+    body: JSON.stringify(userData),
   });
-  return response.json();
-};
 
-export const register = async (userData) => {
-  const response = await fetch(`${API_URL}/register`, {
+export const getMe = (email) => 
+  fetchAPI(`/me?email=${email}`);
+
+// PRODUCTS
+export const getProducts = (category) => 
+  fetchAPI(category ? `/products?category=${category}` : '/products');
+
+export const getProductById = (id) => 
+  fetchAPI(`/products/${id}`);
+
+export const getShopProducts = (ownerEmail) => 
+  fetchAPI(`/shop/products?owner_email=${ownerEmail}`);
+
+export const createShopProduct = (productData, ownerEmail) => 
+  fetchAPI('/shop/products', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(userData)
+    body: JSON.stringify({ ...productData, owner_email: ownerEmail }),
   });
-  return response.json();
-};
 
-// Pour la compatibilité
-export const products = {
-  getAll: getProducts,
-  getById: getProductById,
-  getShopProducts: getShopProducts,
-  createShopProduct: createShopProduct,
-};
+// ORDERS
+export const createOrder = (orderData) => 
+  fetchAPI('/orders', {
+    method: 'POST',
+    body: JSON.stringify(orderData),
+  });
 
-export default {
+export const getOrdersByPhone = (phone) => 
+  fetchAPI(`/orders/${phone}`);
+
+export const getOrdersByEmail = (email) => 
+  fetchAPI(`/orders/user/${email}`);
+
+export const getShopOrders = (ownerEmail) => 
+  fetchAPI(`/orders/shop/${ownerEmail}`);
+
+export const updateOrderStatus = (orderId, status) => 
+  fetchAPI(`/orders/${orderId}/status`, {
+    method: 'PUT',
+    body: JSON.stringify({ status }),
+  });
+
+// NOTIFICATIONS
+export const getUserNotifications = (userId) => 
+  fetchAPI(`/api/notifications/${userId}`);
+
+export const createNotification = (notificationData) => 
+  fetchAPI('/api/notifications', {
+    method: 'POST',
+    body: JSON.stringify(notificationData),
+  });
+
+export const markNotificationAsRead = (notificationId) => 
+  fetchAPI(`/api/notifications/${notificationId}/read`, {
+    method: 'PUT',
+  });
+
+export const markAllNotificationsAsRead = (userId) => 
+  fetchAPI(`/api/notifications/user/${userId}/read-all`, {
+    method: 'PUT',
+  });
+
+export const deleteNotification = (notificationId) => 
+  fetchAPI(`/api/notifications/${notificationId}`, {
+    method: 'DELETE',
+  });
+
+export const testNotification = (userId) => 
+  fetchAPI(`/api/notifications/test/${userId}`, {
+    method: 'POST',
+  });
+
+// ADMIN
+export const getAllUsers = () => 
+  fetchAPI('/admin/users');
+
+export const getStats = () => 
+  fetchAPI('/admin/stats');
+
+// UTILS
+export const testConnection = () => fetchAPI('/');
+export const healthCheck = () => fetchAPI('/health');
+
+// ===== OBJET API POUR L'EXPORT NOMÉ =====
+export const api = {
+  // Auth
+  login,
+  register,
+  getMe,
+  
+  // Products
   getProducts,
   getProductById,
   getShopProducts,
   createShopProduct,
-  login,
-  register,
-  products
+  
+  // Orders
+  createOrder,
+  getOrdersByPhone,
+  getOrdersByEmail,
+  getShopOrders,
+  updateOrderStatus,
+  
+  // Notifications
+  getUserNotifications,
+  createNotification,
+  markNotificationAsRead,
+  markAllNotificationsAsRead,
+  deleteNotification,
+  testNotification,
+  
+  // Admin
+  getAllUsers,
+  getStats,
+  
+  // Utils
+  testConnection,
+  healthCheck,
 };
+
+// Export par défaut aussi pour compatibilité
+export default api;
