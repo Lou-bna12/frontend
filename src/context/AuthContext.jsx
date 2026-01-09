@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
         id: 1,
         email: email,
         full_name: email.split('@')[0],
-        role: 'customer'
+        role: email.includes('shop') ? 'shop' : 'customer' // Détermine le rôle par l'email
       };
       
       setUser(userData);
@@ -73,7 +73,7 @@ export const AuthProvider = ({ children }) => {
     logout,
     loading,
     isAuthenticated: !!user,
-    isShop: user?.role === 'shop',
+    isShop: user?.role === 'shop', // <-- IMPORTANT pour le header
     isAdmin: user?.role === 'admin'
   };
 

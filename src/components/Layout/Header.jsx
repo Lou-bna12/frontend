@@ -1,9 +1,12 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useCart } from '../../context/CartContext';
+
 
 const Header = () => {
   const { user, logout, isShop } = useAuth();
+  const { cartCount } = useCart();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -28,7 +31,7 @@ const Header = () => {
             </Link>
           </div>
 
-          {/* Navigation */}
+          {/* Navigation Desktop */}
           <nav className="hidden md:flex items-center space-x-8">
             <Link to="/" className="nav-link">
               Accueil
@@ -36,9 +39,11 @@ const Header = () => {
             <Link to="/products" className="nav-link">
               Produits
             </Link>
-            <Link to="/categories" className="nav-link">
-              Catégories
-            </Link>
+            {user && isShop && (
+              <Link to="/dashboard" className="nav-link">
+                Dashboard
+              </Link>
+            )}
             <Link to="/about" className="nav-link">
               À propos
             </Link>
@@ -49,16 +54,18 @@ const Header = () => {
             {/* Panier */}
             <Link to="/cart" className="relative p-2 text-gray-700 hover:text-green-600">
               <div className="text-2xl">🛒</div>
-              <span className="absolute -top-1 -right-1 bg-green-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                0
-              </span>
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-green-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
             </Link>
 
             {/* Compte utilisateur */}
             {user ? (
               <div className="flex items-center space-x-3">
                 {isShop && (
-                  <Link to="/dashboard" className="btn-secondary text-sm">
+                  <Link to="/dashboard" className="hidden md:block btn-secondary text-sm">
                     Dashboard
                   </Link>
                 )}
@@ -71,19 +78,25 @@ const Header = () => {
                       {user.full_name}
                     </div>
                   </button>
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
                     <div className="py-1">
                       <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                        Mon profil
+                        👤 Mon profil
                       </Link>
-                      <Link to="/orders" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                        Mes commandes
-                      </Link>
+                     <Link to="/orders" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        📦 Mes commandes
+                    </Link>
+                      {isShop && (
+                        <Link to="/dashboard" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                          🏪 Dashboard shop
+                        </Link>
+                      )}
+                      <div className="border-t border-gray-200 my-1"></div>
                       <button
                         onClick={handleLogout}
                         className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
                       >
-                        Déconnexion
+                        🚪 Déconnexion
                       </button>
                     </div>
                   </div>
@@ -91,13 +104,47 @@ const Header = () => {
               </div>
             ) : (
               <div className="flex items-center space-x-3">
-                <Link to="/login" className="text-gray-700 hover:text-green-600 font-medium">
+                <Link to="/login" className="hidden md:block text-gray-700 hover:text-green-600 font-medium">
                   Connexion
                 </Link>
                 <Link to="/register" className="btn-primary">
                   Inscription
                 </Link>
               </div>
+            )}
+
+            {/* Menu mobile */}
+            <button className="md:hidden p-2 text-gray-700">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        {/* Navigation Mobile */}
+        <div className="md:hidden border-t border-gray-200 py-3">
+          <div className="flex flex-col space-y-2">
+            <Link to="/" className="nav-link px-0">
+              Accueil
+            </Link>
+            <Link to="/products" className="nav-link px-0">
+              Produits
+            </Link>
+            {user && isShop && (
+              <Link to="/dashboard" className="nav-link px-0">
+                Dashboard
+              </Link>
+            )}
+            {!user && (
+              <>
+                <Link to="/login" className="nav-link px-0">
+                  Connexion
+                </Link>
+                <Link to="/register" className="nav-link px-0">
+                  Inscription
+                </Link>
+              </>
             )}
           </div>
         </div>
