@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
-import { Bell, ShoppingBag, Package, AlertCircle, Check, X, MessageSquare, Tag } from 'lucide-react';
+// src/components/UI/NotificationBell.jsx - CORRIGÉ
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Bell, ShoppingBag, Package, AlertCircle, Check, X, MessageSquare, Tag, RefreshCw } from 'lucide-react';
 import { websocketService } from '../../services/websocket';
 import { 
   getUserNotifications, 
@@ -7,24 +8,28 @@ import {
   markAllNotificationsAsRead,
   deleteNotification 
 } from '../../services/api';
-import { AuthContext } from '../../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import './NotificationBell.css';
 
 const NotificationBell = () => {
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const dropdownRef = useRef(null);
+  const buttonRef = useRef(null);
 
-  // Charger les notifications
-  const loadNotifications = async () => {
-    if (!user?.id) return;
+  // Utilise l'ID de l'utilisateur connecté
+  const userId = user?.id;
+
+  // Charger les notifications avec useCallback
+  const loadNotifications = useCallback(async () => {
+    if (!userId) return;
     
     setLoading(true);
     try {
-      const response = await getUserNotifications(user.id);
+      const response = await getUserNotifications(userId);
       if (response.success) {
         const sortedNotifications = response.notifications.sort((a, b) => 
           new Date(b.created_at) - new Date(a.created_at)
@@ -37,19 +42,12 @@ const NotificationBell = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId]);
 
   // Mettre à jour le compteur
   const updateUnreadCount = (notifs) => {
     const unread = notifs.filter(n => !n.read).length;
     setUnreadCount(unread);
-    
-    // Mettre à jour le title de la page
-    if (unread > 0) {
-      document.title = `(${unread}) Marketplace Alger`;
-    } else {
-      document.title = 'Marketplace Alger';
-    }
   };
 
   // Marquer comme lu
@@ -73,10 +71,10 @@ const NotificationBell = () => {
 
   // Marquer toutes comme lues
   const handleMarkAllAsRead = async () => {
-    if (unreadCount === 0 || !user?.id) return;
+    if (unreadCount === 0 || !userId) return;
     
     try {
-      await markAllNotificationsAsRead(user.id);
+      await markAllNotificationsAsRead(userId);
       
       setNotifications(prev => 
         prev.map(n => ({ ...n, read: true }))
@@ -100,7 +98,6 @@ const NotificationBell = () => {
         prev.filter(n => n.id !== notificationId)
       );
       
-      // Mettre à jour le compteur si la notification non lue était supprimée
       if (deletedNotif && !deletedNotif.read) {
         setUnreadCount(prev => Math.max(0, prev - 1));
       }
@@ -149,23 +146,15 @@ const NotificationBell = () => {
     }
   };
 
-  // Tronquer le texte (alternative à line-clamp CSS)
-  const truncateText = (text, maxLength = 80) => {
-    if (!text) return '';
-    if (text.length <= maxLength) return text;
-    
-    return text.substring(0, maxLength) + '...';
-  };
-
   // Effets
   useEffect(() => {
-    if (!user?.id) return;
+    if (!userId) return;
 
     // Charger les notifications initiales
     loadNotifications();
 
     // Connecter WebSocket
-    websocketService.connect(user.id.toString());
+    websocketService.connect(userId.toString());
     websocketService.requestNotificationPermission();
 
     // Écouter les nouvelles notifications
@@ -175,52 +164,70 @@ const NotificationBell = () => {
       setNotifications(prev => [newNotification, ...prev]);
       setUnreadCount(prev => prev + 1);
       
-      // Son de notification (optionnel)
-      if (typeof Audio !== 'undefined') {
-        const audio = new Audio('/notification.mp3');
-        audio.volume = 0.3;
-        audio.play().catch(() => {});
+      // Notification toast
+      if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification(newNotification.title, {
+          body: newNotification.message,
+          icon: '/favicon.ico'
+        });
       }
     };
 
     window.addEventListener('new-notification', handleNewNotification);
 
-    // Fermer dropdown en cliquant à l'extérieur
+    return () => {
+      window.removeEventListener('new-notification', handleNewNotification);
+      // Nettoyer proprement
+      if (websocketService) {
+        websocketService.disconnect();
+      }
+    };
+  }, [userId, loadNotifications]);
+
+  // Gérer le clic en dehors
+  useEffect(() => {
     const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      if (
+        dropdownRef.current && 
+        !dropdownRef.current.contains(event.target) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target)
+      ) {
         setIsOpen(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    // Utiliser capture phase pour éviter les problèmes
+    document.addEventListener('mousedown', handleClickOutside, true);
+    document.addEventListener('touchstart', handleClickOutside, true);
 
-    // Nettoyage
     return () => {
-      window.removeEventListener('new-notification', handleNewNotification);
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside, true);
+      document.removeEventListener('touchstart', handleClickOutside, true);
     };
-  }, [user?.id]);
+  }, []);
 
   // Rendu si pas d'utilisateur
-  if (!user) return null;
+  if (!userId) return null;
 
   return (
     <div className="relative" ref={dropdownRef}>
       {/* Bouton de notification */}
       <button
+        ref={buttonRef}
         onClick={() => {
           setIsOpen(!isOpen);
           if (!isOpen) {
             loadNotifications();
           }
         }}
-        className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         aria-label={`Notifications ${unreadCount > 0 ? `(${unreadCount} non lu${unreadCount !== 1 ? 's' : ''})` : ''}`}
       >
         <Bell className="w-6 h-6" />
         
         {unreadCount > 0 && (
-          <span className="notification-badge absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-semibold">
+          <span className="notification-badge absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-semibold border-2 border-white">
             {unreadCount > 9 ? '9+' : unreadCount}
           </span>
         )}
@@ -228,7 +235,7 @@ const NotificationBell = () => {
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 z-50">
+        <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-lg shadow-xl border border-gray-200 z-50">
           {/* Header */}
           <div className="p-4 border-b flex justify-between items-center bg-gray-50 rounded-t-lg">
             <div>
@@ -242,9 +249,8 @@ const NotificationBell = () => {
               {unreadCount > 0 && (
                 <button
                   onClick={handleMarkAllAsRead}
-                  className="text-sm text-blue-600 hover:text-blue-800 p-1 rounded hover:bg-blue-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="text-sm text-blue-600 hover:text-blue-800 p-1 rounded hover:bg-blue-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
                   title="Tout marquer comme lu"
-                  aria-label="Marquer toutes les notifications comme lues"
                 >
                   <Check className="w-4 h-4" />
                 </button>
@@ -253,14 +259,13 @@ const NotificationBell = () => {
               <button
                 onClick={loadNotifications}
                 disabled={loading}
-                className="text-sm text-gray-600 hover:text-gray-800 p-1 rounded hover:bg-gray-100 transition-colors disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                className="text-sm text-gray-600 hover:text-gray-800 p-1 rounded hover:bg-gray-100 transition-colors disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-1"
                 title="Actualiser"
-                aria-label="Actualiser les notifications"
               >
                 {loading ? (
                   <div className="w-4 h-4 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin"></div>
                 ) : (
-                  <span aria-hidden="true">↻</span>
+                  <RefreshCw className="w-4 h-4" />
                 )}
               </button>
             </div>
@@ -277,20 +282,11 @@ const NotificationBell = () => {
             ) : (
               notifications.map((notification) => (
                 <div
-                  key={notification.id}
-                  className={`p-4 border-b hover:bg-gray-50 cursor-pointer transition-all duration-200 focus:outline-none focus:bg-gray-100 ${
+                  key={`notif-${notification.id}`}
+                  className={`p-4 border-b hover:bg-gray-50 cursor-pointer transition-all duration-200 ${
                     !notification.read ? 'bg-blue-50 border-l-4 border-l-blue-500' : ''
                   }`}
                   onClick={() => handleMarkAsRead(notification.id)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      handleMarkAsRead(notification.id);
-                    }
-                  }}
-                  tabIndex={0}
-                  role="button"
-                  aria-label={`Notification: ${notification.title}. ${notification.message}. ${!notification.read ? 'Non lue.' : 'Lue.'}`}
                 >
                   <div className="flex gap-3">
                     <div className="mt-0.5">
@@ -299,7 +295,7 @@ const NotificationBell = () => {
                     
                     <div className="flex-1 min-w-0">
                       <div className="flex justify-between items-start">
-                        <h4 className={`font-medium truncate ${!notification.read ? 'text-gray-900 font-semibold' : 'text-gray-700'}`}>
+                        <h4 className={`font-medium truncate ${!notification.read ? 'text-gray-900' : 'text-gray-700'}`}>
                           {notification.title}
                         </h4>
                         
@@ -310,35 +306,17 @@ const NotificationBell = () => {
                           
                           <button
                             onClick={(e) => handleDeleteNotification(notification.id, e)}
-                            className="text-gray-400 hover:text-red-500 p-1 rounded hover:bg-red-50 ml-1 focus:outline-none focus:ring-2 focus:ring-red-500"
+                            className="text-gray-400 hover:text-red-500 p-1 rounded hover:bg-red-50 ml-1"
                             title="Supprimer"
-                            aria-label={`Supprimer la notification: ${notification.title}`}
                           >
                             <X className="w-3 h-3" />
                           </button>
                         </div>
                       </div>
                       
-                      <p className="text-sm text-gray-600 mt-1 truncate-2-lines">
-                        {truncateText(notification.message, 100)}
+                      <p className="text-sm text-gray-600 mt-1 line-clamp-2">
+                        {notification.message}
                       </p>
-                      
-                      {notification.link && (
-                        <div className="mt-2">
-                          <span className="inline-block text-xs text-blue-600 hover:text-blue-800">
-                            Voir les détails →
-                          </span>
-                        </div>
-                      )}
-                      
-                      <div className="flex items-center mt-2">
-                        {!notification.read && (
-                          <span className="inline-block w-2 h-2 bg-blue-500 rounded-full mr-2" aria-label="Non lue"></span>
-                        )}
-                        <span className="text-xs text-gray-500 capitalize">
-                          {notification.type}
-                        </span>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -354,8 +332,7 @@ const NotificationBell = () => {
                   setIsOpen(false);
                   window.location.href = '/notifications';
                 }}
-                className="w-full text-sm text-center text-blue-600 hover:text-blue-800 font-medium py-2 hover:bg-blue-50 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
-                aria-label="Voir toutes les notifications"
+                className="w-full text-sm text-center text-blue-600 hover:text-blue-800 font-medium py-2 hover:bg-blue-50 rounded transition-colors"
               >
                 Voir toutes les notifications
               </button>

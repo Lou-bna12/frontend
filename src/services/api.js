@@ -1,4 +1,4 @@
-// src/services/api.js - Version corrigée
+
 const API_URL = "http://localhost:8000";
 
 // Helper function
@@ -85,6 +85,15 @@ export const updateOrderStatus = (orderId, status) =>
   });
 
 // NOTIFICATIONS
+// Test l'API REST
+fetch('http://localhost:8000/api/notifications/1')
+  .then(r => r.json())
+  .then(data => console.log('📋 Notifications:', data));
+
+// Envoie une notification test
+fetch('http://localhost:8000/api/notifications/test/1', { method: 'POST' })
+  .then(r => r.json())
+  .then(data => console.log('🎯 Notification test:', data));
 export const getUserNotifications = (userId) => 
   fetchAPI(`/api/notifications/${userId}`);
 

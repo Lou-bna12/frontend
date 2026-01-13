@@ -2,6 +2,9 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 
 const CartContext = createContext({});
 
+// AJOUTE CETTE LIGNE POUR EXPORTER LE CONTEXTE
+export { CartContext };
+
 export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
