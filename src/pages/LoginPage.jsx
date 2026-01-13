@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
-import Header from '../components/Layout/Header';
+
 
 const LoginPage = () => {
   const { login } = useAuth();
@@ -31,7 +31,7 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
+
       
       <div className="container mx-auto px-4 py-12 max-w-md">
         <div className="card">

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import Header from '../components/Layout/Header';
+
 
 const RegisterPage = () => {
   const { register } = useAuth();
@@ -36,7 +36,7 @@ const RegisterPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
+ 
       
       <div className="container mx-auto px-4 py-12 max-w-md">
         <div className="card">
