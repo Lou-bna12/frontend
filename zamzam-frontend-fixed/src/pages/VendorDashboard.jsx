@@ -3,6 +3,8 @@ import { useAuth } from "../context/AuthContext";
 import VendorLayout from "../layouts/VendorLayout";
 import VendorStats from "../components/VendorStats";
 import VendorOrdersTable from "../components/VendorOrdersTable";
+import VendorCharts from "../components/VendorCharts";
+
 
 export default function VendorDashboard() {
   const { user } = useAuth();
@@ -12,13 +14,16 @@ export default function VendorDashboard() {
     return <Navigate to="/connexion" />;
   }
 
-  return (
-    <VendorLayout>
-      {/* 📊 Cartes statistiques */}
-      <VendorStats />
+ return (
+  <VendorLayout>
+    {/* 📊 STATS */}
+    <VendorStats />
 
-      {/* 📦 Table des commandes */}
-      <VendorOrdersTable />
-    </VendorLayout>
-  );
+    {/* 📈 GRAPHIQUES */}
+    <VendorCharts />
+
+    {/* 📦 TABLE COMMANDES */}
+    <VendorOrdersTable />
+  </VendorLayout>
+);
 }

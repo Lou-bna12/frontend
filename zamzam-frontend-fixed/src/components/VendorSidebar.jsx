@@ -14,9 +14,13 @@ export default function VendorSidebar() {
         <Link to="/dashboard-fournisseur" className="block hover:text-emerald-400">
           Accueil
         </Link>
-        <Link to="#" className="block hover:text-emerald-400">
-          Produits
-        </Link>
+        <Link
+  to="/dashboard-fournisseur/produits"
+  className="block hover:text-emerald-400"
+>
+  Produits
+</Link>
+
         <Link to="#" className="block hover:text-emerald-400">
           Commandes
         </Link>
