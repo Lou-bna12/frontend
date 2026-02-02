@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
 import { ShoppingCart, User, Search, Menu, X } from "lucide-react";
 import { useState } from "react";
+import { useCart } from "../context/CartContext";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const { cart } = useCart();
 
   return (
     <>
@@ -42,28 +44,26 @@ export default function Navbar() {
 
             <Link to="/panier" className="relative">
               <ShoppingCart size={20} className="text-gray-700 hover:text-emerald-600" />
-              <span className="absolute -top-1.5 -right-1.5 bg-emerald-600 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">
-                0
-              </span>
+              {cart.length > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 bg-emerald-600 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">
+                  {cart.length}
+                </span>
+              )}
             </Link>
           </div>
 
           {/* Burger mobile */}
-          <button
-            onClick={() => setOpen(true)}
-            className="md:hidden"
-          >
+          <button onClick={() => setOpen(true)} className="md:hidden">
             <Menu size={26} />
           </button>
         </div>
       </header>
 
-      {/* MENU MOBILE */}
+      {/* Menu mobile */}
       {open && (
         <div className="fixed inset-0 bg-black/40 z-50">
-          <div className="absolute top-0 right-0 w-72 h-full bg-white p-6 space-y-6">
+          <div className="absolute top-0 right-0 w-72 h-full bg-white p-6">
 
-            {/* Close */}
             <button
               onClick={() => setOpen(false)}
               className="absolute top-4 right-4"
@@ -71,8 +71,7 @@ export default function Navbar() {
               <X size={22} />
             </button>
 
-            {/* Links */}
-            <nav className="flex flex-col gap-4 mt-8 text-gray-700">
+            <nav className="flex flex-col gap-4 mt-10 text-gray-700">
               <Link to="/" onClick={() => setOpen(false)}>Accueil</Link>
               <Link to="/courses" onClick={() => setOpen(false)}>Courses</Link>
               <Link to="/restaurants" onClick={() => setOpen(false)}>Restaurants</Link>
@@ -80,6 +79,15 @@ export default function Navbar() {
               <Link to="/fournisseurs" onClick={() => setOpen(false)}>Fournisseurs</Link>
 
               <hr />
+
+              <Link
+                to="/panier"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-2"
+              >
+                <ShoppingCart size={18} />
+                Panier ({cart.length})
+              </Link>
 
               <Link
                 to="/connexion"

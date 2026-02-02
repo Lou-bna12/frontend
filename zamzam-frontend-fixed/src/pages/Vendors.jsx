@@ -1,3 +1,6 @@
+
+import { Link } from "react-router-dom";
+
 export default function Vendors() {
   const vendors = [
     {
@@ -28,7 +31,6 @@ export default function Vendors() {
 
   return (
     <div className="space-y-8">
-
       {/* Titre */}
       <div>
         <h1 className="text-3xl font-bold text-gray-900">
@@ -42,9 +44,10 @@ export default function Vendors() {
       {/* Grille fournisseurs */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {vendors.map((vendor) => (
-          <div
+          <Link
             key={vendor.id}
-            className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer"
+            to={`/fournisseurs/${vendor.id}`}
+            className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition block"
           >
             <h3 className="text-lg font-semibold text-gray-800">
               {vendor.name}
@@ -57,7 +60,7 @@ export default function Vendors() {
             <p className="text-sm text-gray-400 mt-2">
               📍 {vendor.city}
             </p>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

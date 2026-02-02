@@ -11,6 +11,8 @@ import Cart from "./pages/Cart";
 import Groceries from "./pages/Groceries";
 import Restaurants from "./pages/Restaurants";
 import Auto from "./pages/Auto";
+import VendorDetail from "./pages/VendorDetail";
+
 
 
 function App() {
@@ -30,6 +32,8 @@ function App() {
             <Route path="/courses" element={<Groceries />} />
             <Route path="/restaurants" element={<Restaurants />} />
             <Route path="/auto" element={<Auto />} />
+            <Route path="/fournisseurs/:id" element={<VendorDetail />} />
+
 
 
           </Routes>
