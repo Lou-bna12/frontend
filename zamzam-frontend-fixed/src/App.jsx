@@ -12,6 +12,8 @@ import Groceries from "./pages/Groceries";
 import Restaurants from "./pages/Restaurants";
 import Auto from "./pages/Auto";
 import VendorDetail from "./pages/VendorDetail";
+import Orders from "./pages/Orders";
+
 
 
 
@@ -33,6 +35,8 @@ function App() {
             <Route path="/restaurants" element={<Restaurants />} />
             <Route path="/auto" element={<Auto />} />
             <Route path="/fournisseurs/:id" element={<VendorDetail />} />
+            <Route path="/commandes" element={<Orders />} />
+
 
 
 

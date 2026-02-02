@@ -55,6 +55,7 @@ export default function Navbar() {
           {/* Burger mobile */}
           <button onClick={() => setOpen(true)} className="md:hidden">
             <Menu size={26} />
+            
           </button>
         </div>
       </header>
@@ -63,7 +64,7 @@ export default function Navbar() {
       {open && (
         <div className="fixed inset-0 bg-black/40 z-50">
           <div className="absolute top-0 right-0 w-72 h-full bg-white p-6">
-
+      
             <button
               onClick={() => setOpen(false)}
               className="absolute top-4 right-4"
@@ -77,6 +78,7 @@ export default function Navbar() {
               <Link to="/restaurants" onClick={() => setOpen(false)}>Restaurants</Link>
               <Link to="/auto" onClick={() => setOpen(false)}>Auto & services</Link>
               <Link to="/fournisseurs" onClick={() => setOpen(false)}>Fournisseurs</Link>
+              <Link to="/commandes" onClick={() => setOpen(false)}>Mes commandes</Link>
 
               <hr />
 
