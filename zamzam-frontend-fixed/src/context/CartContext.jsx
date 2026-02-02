@@ -23,7 +23,7 @@ export function CartProvider({ children }) {
     });
   };
 
-  // ➖ Diminuer la quantité
+  // ➖ Diminuer quantité
   const decreaseQuantity = (id) => {
     setCart((prev) =>
       prev
@@ -36,12 +36,12 @@ export function CartProvider({ children }) {
     );
   };
 
-  // 🗑️ Supprimer un produit
+  // 🗑️ Supprimer produit
   const removeFromCart = (id) => {
     setCart((prev) => prev.filter((item) => item.id !== id));
   };
 
-  // 🧹 Vider le panier
+  // 🧹 Vider panier
   const clearCart = () => {
     setCart([]);
   };
@@ -59,10 +59,22 @@ export function CartProvider({ children }) {
       customer,
       items: cart,
       total,
+      status: "En attente",
     };
 
     setOrders((prev) => [...prev, newOrder]);
     clearCart();
+  };
+
+  // 🚚 Mettre à jour le statut (côté fournisseur)
+  const updateOrderStatus = (orderId, status) => {
+    setOrders((prev) =>
+      prev.map((order) =>
+        order.id === orderId
+          ? { ...order, status }
+          : order
+      )
+    );
   };
 
   return (
@@ -75,6 +87,7 @@ export function CartProvider({ children }) {
         removeFromCart,
         clearCart,
         createOrder,
+        updateOrderStatus,
       }}
     >
       {children}

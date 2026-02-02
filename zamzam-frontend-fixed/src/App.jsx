@@ -13,6 +13,8 @@ import Restaurants from "./pages/Restaurants";
 import Auto from "./pages/Auto";
 import VendorDetail from "./pages/VendorDetail";
 import Orders from "./pages/Orders";
+import VendorDashboard from "./pages/VendorDashboard";
+
 
 
 
@@ -36,6 +38,8 @@ function App() {
             <Route path="/auto" element={<Auto />} />
             <Route path="/fournisseurs/:id" element={<VendorDetail />} />
             <Route path="/commandes" element={<Orders />} />
+            <Route path="/dashboard-fournisseur" element={<VendorDashboard />} />
+
 
 
 

@@ -1,4 +1,6 @@
 import { useCart } from "../context/CartContext";
+import { orderStatusStyles } from "../utils/orderStatus";
+
 
 export default function Orders() {
   const { orders } = useCart();
@@ -24,10 +26,18 @@ export default function Orders() {
                 <span className="font-semibold">
                   Commande #{order.id}
                 </span>
-                <span className="text-sm text-gray-500">
-                  {order.date}
-                </span>
+
+               <span
+  className={`text-sm px-3 py-1 rounded-full font-medium transition
+    ${orderStatusStyles[order.status] || "bg-gray-100 text-gray-700"}`}
+>
+  {order.status}
+</span>
               </div>
+
+              <p className="text-sm text-gray-500 mb-3">
+                {order.date}
+              </p>
 
               <div className="space-y-2">
                 {order.items.map((item) => (
