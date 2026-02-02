@@ -1,17 +1,13 @@
 import { useState } from "react";
 import { useCart } from "../context/CartContext";
 
-
-const { cart, addToCart, removeFromCart, decreaseQuantity, createOrder } = useCart();
-
-
 export default function Cart() {
   const {
     cart,
     addToCart,
     removeFromCart,
     decreaseQuantity,
-    clearCart,
+    createOrder,
   } = useCart();
 
   const [name, setName] = useState("");
@@ -25,20 +21,19 @@ export default function Cart() {
   }, 0);
 
   const handleOrder = () => {
-  if (!name || !phone || !address) {
-    alert("Merci de remplir tous les champs");
-    return;
-  }
+    if (!name || !phone || !address) {
+      alert("Merci de remplir tous les champs");
+      return;
+    }
 
-  createOrder({
-    name,
-    phone,
-    address,
-  });
+    createOrder({
+      name,
+      phone,
+      address,
+    });
 
-  setSuccess(true);
-};
-
+    setSuccess(true);
+  };
 
   if (success) {
     return (
