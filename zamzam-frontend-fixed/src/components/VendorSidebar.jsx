@@ -1,41 +1,69 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
-export default function VendorSidebar() {
+const linkBase =
+  "block px-3 py-2 rounded-lg text-sm transition";
+const linkInactive =
+  "text-slate-300 hover:text-emerald-400 hover:bg-slate-800";
+const linkActive =
+  "text-white bg-slate-800";
+
+export default function VendorSidebar({ isOpen, onClose }) {
   return (
-    <aside className="w-64 bg-slate-900 text-white min-h-screen p-6 space-y-8">
-      
+    <aside
+      className={`
+        fixed z-40 inset-y-0 left-0 w-64 bg-slate-900 text-white p-6
+        transform transition-transform duration-200
+        ${isOpen ? "translate-x-0" : "-translate-x-full"}
+        md:static md:translate-x-0
+      `}
+    >
       {/* LOGO */}
-      <div className="text-2xl font-bold text-emerald-400">
+      <div className="text-2xl font-bold text-emerald-400 mb-8">
         ZamZam
       </div>
 
       {/* MENU */}
-      <nav className="space-y-4 text-sm">
-        <Link to="/dashboard-fournisseur" className="block hover:text-emerald-400">
+      <nav className="space-y-2">
+        <NavLink
+          to="/dashboard-fournisseur"
+          end
+          className={({ isActive }) =>
+            `${linkBase} ${isActive ? linkActive : linkInactive}`
+          }
+          onClick={onClose}
+        >
           Accueil
-        </Link>
-        <Link
-  to="/dashboard-fournisseur/produits"
-  className="block hover:text-emerald-400"
->
-  Produits
-</Link>
+        </NavLink>
 
-        <Link to="#" className="block hover:text-emerald-400">
+        <NavLink
+          to="/dashboard-fournisseur/produits"
+          className={({ isActive }) =>
+            `${linkBase} ${isActive ? linkActive : linkInactive}`
+          }
+          onClick={onClose}
+        >
+          Produits
+        </NavLink>
+
+        <NavLink
+          to="/dashboard-fournisseur/commandes"
+          className={({ isActive }) =>
+            `${linkBase} ${isActive ? linkActive : linkInactive}`
+          }
+          onClick={onClose}
+        >
           Commandes
-        </Link>
-        <Link to="#" className="block hover:text-emerald-400">
-          Gagnottes & règlements
-        </Link>
-        <Link to="#" className="block hover:text-emerald-400">
-          Avis & notations
-        </Link>
-        <Link to="#" className="block hover:text-emerald-400">
+        </NavLink>
+
+        <NavLink
+          to="/dashboard-fournisseur/parametres"
+          className={({ isActive }) =>
+            `${linkBase} ${isActive ? linkActive : linkInactive}`
+          }
+          onClick={onClose}
+        >
           Paramètres
-        </Link>
-        <Link to="#" className="block hover:text-emerald-400">
-          Centre d’aide
-        </Link>
+        </NavLink>
       </nav>
     </aside>
   );

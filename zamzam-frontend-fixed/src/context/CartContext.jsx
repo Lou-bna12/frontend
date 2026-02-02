@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from "react";
+import { useNotifications } from "./NotificationContext";
 
 const CartContext = createContext();
 
@@ -6,12 +7,14 @@ export function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
   const [orders, setOrders] = useState([]);
 
-  // ➕ Ajouter au panier (gère les quantités)
+  const { addNotification } = useNotifications();
+
+  // ➕ Ajouter au panier
   const addToCart = (product) => {
     setCart((prev) => {
-      const existingItem = prev.find((item) => item.id === product.id);
+      const existing = prev.find((item) => item.id === product.id);
 
-      if (existingItem) {
+      if (existing) {
         return prev.map((item) =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + 1 }
@@ -46,7 +49,7 @@ export function CartProvider({ children }) {
     setCart([]);
   };
 
-  // 📦 Créer une commande
+  // 📦 Créer commande
   const createOrder = (customer) => {
     const total = cart.reduce((sum, item) => {
       const price = parseInt(item.price);
@@ -64,9 +67,12 @@ export function CartProvider({ children }) {
 
     setOrders((prev) => [...prev, newOrder]);
     clearCart();
+
+    // 🔔 Notification nouvelle commande
+    addNotification("📦 Nouvelle commande reçue");
   };
 
-  // 🚚 Mettre à jour le statut (côté fournisseur)
+  // 🚚 Mise à jour statut
   const updateOrderStatus = (orderId, status) => {
     setOrders((prev) =>
       prev.map((order) =>
@@ -75,6 +81,9 @@ export function CartProvider({ children }) {
           : order
       )
     );
+
+    // 🔔 Notification changement statut
+    addNotification(`🚚 Statut de commande mis à jour : ${status}`);
   };
 
   return (
