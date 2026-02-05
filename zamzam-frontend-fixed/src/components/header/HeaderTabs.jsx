@@ -16,20 +16,33 @@ export default function HeaderTabs({ activeTab, onChange }) {
 
         return (
           <button
-            key={id}
-            onClick={() => onChange(id)}
-            className={`flex flex-col items-center gap-1 transition
-              ${
-                active
-                  ? "text-gray-900 border-b-2 border-gray-900"
-                  : "text-gray-400 hover:text-gray-700"
-              }`}
-          >
-            <Icon className="w-6 h-6" />
-            <span className="text-sm font-medium">{label}</span>
-          </button>
+  key={id}
+  onClick={() => onChange(id)}
+  className={`
+    flex flex-col items-center gap-1 px-4 py-2 rounded-xl
+    transition-all duration-200
+    ${
+      active
+        ? "bg-white shadow-md scale-105"
+        : "bg-gray-50 hover:shadow-lg hover:-translate-y-1"
+    }
+  `}
+>
+  <Icon
+    className={`w-7 h-7 ${
+      id === "stores"
+        ? "text-green-600"
+        : id === "products"
+        ? "text-orange-500"
+        : "text-blue-500"
+    }`}
+  />
+  <span className="text-sm font-medium text-gray-700">
+    {label}
+  </span>
+</button>
         );
       })}
     </div>
   );
-}
+} 
