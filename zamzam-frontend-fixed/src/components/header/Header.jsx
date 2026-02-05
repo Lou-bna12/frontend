@@ -1,22 +1,16 @@
-import { useState } from "react";
 import HeaderTabs from "./HeaderTabs";
 import SearchBar from "./SearchBar";
 
-export default function Header() {
-  const [activeTab, setActiveTab] = useState("stores");
-
+export default function Header({ activeTab, onChange }) {
   return (
     <header className="sticky top-0 z-50 bg-white border-b">
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-        {/* Logo */}
         <div className="text-xl font-semibold text-green-700">
           ZamZam
         </div>
 
-        {/* Search */}
         <SearchBar />
 
-        {/* Right */}
         <div className="flex items-center gap-4">
           <button className="text-sm font-medium hover:underline">
             Devenir partenaire
@@ -27,11 +21,7 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Tabs */}
-      <HeaderTabs
-        activeTab={activeTab}
-        onChange={setActiveTab}
-      />
+      <HeaderTabs activeTab={activeTab} onChange={onChange} />
     </header>
   );
 }
