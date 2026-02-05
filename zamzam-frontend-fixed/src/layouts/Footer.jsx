@@ -35,9 +35,9 @@ export default function Footer() {
           <ul className="space-y-2 text-sm">
             <li className="hover:text-white cursor-pointer">Devenir vendeur</li>
             <li className="hover:text-white cursor-pointer">Devenir livreur</li>
-            <li className="hover:text-white cursor-pointer">
-  <a href="/about">À propos</a>
-</li>
+            <li className="hover:text-white cursor-pointer"><a href="/about">À propos</a></li>
+            <li className="hover:text-white cursor-pointer"><a href="/vision">Vision & Valeurs</a></li>
+
 
           </ul>
         </div>

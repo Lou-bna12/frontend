@@ -15,9 +15,6 @@ export default function Header({ activeTab, onChange }) {
           <button className="text-sm font-medium hover:underline">
             Devenir partenaire
           </button>
-          <button className="p-2 rounded-full border hover:shadow">
-            ☰
-          </button>
         </div>
       </div>
 

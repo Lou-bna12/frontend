@@ -10,39 +10,40 @@ const tabs = [
 
 export default function HeaderTabs({ activeTab, onChange }) {
   return (
-    <div className="flex justify-center gap-10 mt-4">
+    <div className="flex justify-center gap-8 py-4 border-t">
       {tabs.map(({ id, label, Icon }) => {
         const active = activeTab === id;
 
         return (
           <button
-  key={id}
-  onClick={() => onChange(id)}
-  className={`
-    flex flex-col items-center gap-1 px-4 py-2 rounded-xl
-    transition-all duration-200
-    ${
-      active
-        ? "bg-white shadow-md scale-105"
-        : "bg-gray-50 hover:shadow-lg hover:-translate-y-1"
-    }
-  `}
->
-  <Icon
-    className={`w-7 h-7 ${
-      id === "stores"
-        ? "text-green-600"
-        : id === "products"
-        ? "text-orange-500"
-        : "text-blue-500"
-    }`}
-  />
-  <span className="text-sm font-medium text-gray-700">
-    {label}
-  </span>
-</button>
+            key={id}
+            type="button"
+            onClick={() => onChange(id)}
+            className={`
+              flex flex-col items-center gap-1 px-4 py-2 rounded-xl
+              transition-all duration-200
+              ${
+                active
+                  ? "bg-white shadow-md scale-105"
+                  : "bg-gray-50 hover:shadow-lg hover:-translate-y-1"
+              }
+            `}
+          >
+            <Icon
+              className={`w-7 h-7 ${
+                id === "stores"
+                  ? "text-green-600"
+                  : id === "products"
+                  ? "text-orange-500"
+                  : "text-blue-500"
+              }`}
+            />
+            <span className="text-sm font-medium text-gray-700">
+              {label}
+            </span>
+          </button>
         );
       })}
     </div>
   );
-} 
+}
