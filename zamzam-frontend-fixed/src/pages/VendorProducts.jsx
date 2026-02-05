@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useProducts } from "../context/ProductContext";
 import VendorLayout from "../layouts/VendorLayout";
+import { formatPrice } from "../utils/format";
+
 
 export default function VendorProducts() {
   const { products, addProduct, removeProduct } = useProducts();
@@ -78,7 +80,7 @@ export default function VendorProducts() {
               {products.map((p) => (
                 <tr key={p.id} className="border-t">
                   <td className="px-6 py-3">{p.name}</td>
-                  <td className="px-6 py-3">{p.price} DA</td>
+                  <td className="px-6 py-3">{formatPrice(p.price)} DA</td>
                   <td className="px-6 py-3">{p.stock}</td>
                   <td className="px-6 py-3">{p.status}</td>
                   <td className="px-6 py-3">

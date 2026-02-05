@@ -14,7 +14,7 @@ export default function VendorLayout({ children }) {
       <div className="flex-1 flex flex-col md:ml-64">
         <VendorHeader onMenu={() => setOpen(true)} />
 
-        <main className="p-4 md:p-6">
+        <main className="p-4 md:p-6 space-y-6">
           {children}
         </main>
       </div>

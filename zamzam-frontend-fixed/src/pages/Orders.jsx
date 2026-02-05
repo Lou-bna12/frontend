@@ -1,5 +1,7 @@
 import { useCart } from "../context/CartContext";
 import { orderStatusStyles } from "../utils/orderStatus";
+import { formatPrice } from "../utils/format";
+
 
 
 export default function Orders() {
@@ -49,14 +51,15 @@ export default function Orders() {
                       {item.name} × {item.quantity}
                     </span>
                     <span>
-                      {parseInt(item.price) * item.quantity} DA
+                      {formatPrice(parseInt(item.price) * item.quantity)}
+                        DA
                     </span>
                   </div>
                 ))}
               </div>
 
               <div className="mt-4 text-right font-bold text-emerald-600">
-                Total : {order.total} DA
+                Total : {formatPrice(order.total)} DA
               </div>
             </div>
           ))}

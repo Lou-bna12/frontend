@@ -1,5 +1,7 @@
 import { useCart } from "../context/CartContext";
 import { orderStatusStyles } from "../utils/orderStatus";
+import { formatPrice } from "../utils/format";
+
 
 export default function VendorOrdersTable() {
   const { orders, updateOrderStatus } = useCart();
@@ -13,8 +15,8 @@ export default function VendorOrdersTable() {
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm overflow-x-auto">
-      <table className="w-full text-sm">
+    <div className="overflow-x-auto">
+    <table className="min-w-[900px] w-full text-sm">
         <thead className="bg-gray-50 text-gray-600">
           <tr>
             <th className="text-left px-6 py-4">Commande</th>
@@ -45,7 +47,7 @@ export default function VendorOrdersTable() {
               </td>
 
               <td className="px-6 py-4 font-semibold text-emerald-600">
-                {order.total} DA
+                {formatPrice(order.total)} DA 
               </td>
 
               <td className="px-6 py-4">

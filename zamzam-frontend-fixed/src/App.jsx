@@ -2,6 +2,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import CategoryBar from "./components/CategoryBar";
+import Header from "./components/header/Header";
+
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -24,7 +26,8 @@ function App() {
   return (
     <BrowserRouter>
       <div className="min-h-screen bg-gray-50">
-        <Navbar />
+       {/*<Navbar />*/}
+        <Header />
         <CategoryBar />
 
         <main className="max-w-7xl mx-auto px-6 py-10">

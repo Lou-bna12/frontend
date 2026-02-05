@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useCart } from "../context/CartContext";
+import { formatPrice } from "../utils/format";
+
 
 export default function Cart() {
   const {
@@ -65,7 +67,10 @@ export default function Cart() {
               >
                 <div>
                   <h3 className="font-semibold">{item.name}</h3>
-                  <p className="text-sm text-gray-500">{item.price}</p>
+                  <p className="text-sm text-gray-500">
+  {formatPrice(item.price)}
+</p>
+
                 </div>
 
                 <div className="flex items-center gap-3">
@@ -100,7 +105,8 @@ export default function Cart() {
           <div className="bg-white p-6 rounded-lg shadow-sm flex justify-between items-center">
             <span className="text-lg font-semibold">Total</span>
             <span className="text-xl font-bold text-emerald-600">
-              {total} DA
+              {formatPrice(total)}
+
             </span>
           </div>
 
