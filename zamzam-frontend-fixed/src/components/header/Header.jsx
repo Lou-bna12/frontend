@@ -1,5 +1,4 @@
 import HeaderTabs from "./HeaderTabs";
-import SearchBar from "./SearchBar";
 
 export default function Header({ activeTab, onChange }) {
   return (
@@ -8,8 +7,6 @@ export default function Header({ activeTab, onChange }) {
         <div className="text-xl font-semibold text-green-700">
           ZamZam
         </div>
-
-        <SearchBar />
 
         <div className="flex items-center gap-4">
           <button className="text-sm font-medium hover:underline">

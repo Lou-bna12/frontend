@@ -2,10 +2,16 @@ import StoresSection from "../components/home/StoresSection";
 import ProductsSection from "../components/home/ProductsSection";
 import DeliverySection from "../components/home/DeliverySection";
 import TrustSection from "../components/home/TrustSection";
+import HomeSearchBar from "../components/home/HomeSearchBar";
+
 
 export default function Home({ activeTab }) {
   return (
     <main className="max-w-7xl mx-auto px-4 py-6">
+      
+      {/* 🔍 Search contextuelle */}
+      <HomeSearchBar />
+
       <div key={activeTab} className="animate-fadeInUp">
         {activeTab === "stores" && <StoresSection />}
         {activeTab === "products" && <ProductsSection />}
@@ -16,3 +22,5 @@ export default function Home({ activeTab }) {
     </main>
   );
 }
+
+
