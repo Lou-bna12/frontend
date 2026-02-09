@@ -7,7 +7,9 @@ export function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
   const [orders, setOrders] = useState([]);
 
-  const { addNotification } = useNotifications();
+  // 🔐 Sécurisation du hook
+  const notifications = useNotifications();
+  const addNotification = notifications?.addNotification;
 
   // ➕ Ajouter au panier
   const addToCart = (product) => {
@@ -24,6 +26,8 @@ export function CartProvider({ children }) {
 
       return [...prev, { ...product, quantity: 1 }];
     });
+
+    addNotification?.("🛒 Produit ajouté au panier");
   };
 
   // ➖ Diminuer quantité
@@ -42,6 +46,7 @@ export function CartProvider({ children }) {
   // 🗑️ Supprimer produit
   const removeFromCart = (id) => {
     setCart((prev) => prev.filter((item) => item.id !== id));
+    addNotification?.("🗑️ Produit supprimé du panier");
   };
 
   // 🧹 Vider panier
@@ -52,7 +57,7 @@ export function CartProvider({ children }) {
   // 📦 Créer commande
   const createOrder = (customer) => {
     const total = cart.reduce((sum, item) => {
-      const price = parseInt(item.price);
+      const price = Number(item.price) || 0;
       return sum + price * item.quantity;
     }, 0);
 
@@ -68,22 +73,18 @@ export function CartProvider({ children }) {
     setOrders((prev) => [...prev, newOrder]);
     clearCart();
 
-    // 🔔 Notification nouvelle commande
-    addNotification("📦 Nouvelle commande reçue");
+    addNotification?.("📦 Nouvelle commande reçue");
   };
 
   // 🚚 Mise à jour statut
   const updateOrderStatus = (orderId, status) => {
     setOrders((prev) =>
       prev.map((order) =>
-        order.id === orderId
-          ? { ...order, status }
-          : order
+        order.id === orderId ? { ...order, status } : order
       )
     );
 
-    // 🔔 Notification changement statut
-    addNotification(`🚚 Statut de commande mis à jour : ${status}`);
+    addNotification?.(`🚚 Statut de commande mis à jour : ${status}`);
   };
 
   return (
