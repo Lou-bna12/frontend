@@ -24,3 +24,22 @@ body {
 .animate-fadeInUp {
   animation: fadeInUp 0.35s ease-out;
 }
+
+
+
+/* Couleurs pour les points des magasins */
+.bg-green-500 {
+  background-color: #22c55e;
+}
+
+.bg-emerald-500 {
+  background-color: #10b981;
+}
+
+.bg-purple-500 {
+  background-color: #8b5cf6;
+}
+
+.bg-blue-500 {
+  background-color: #3b82f6;
+}
