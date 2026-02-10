@@ -43,3 +43,80 @@ body {
 .bg-blue-500 {
   background-color: #3b82f6;
 }
+
+/* Couleurs pour l'effet 3D des onglets */
+.bg-green-50 { background-color: #f0fdf4; }
+.bg-green-100 { background-color: #dcfce7; }
+.bg-green-200 { background-color: #bbf7d0; }
+.bg-green-500 { background-color: #22c55e; }
+.bg-green-600 { background-color: #16a34a; }
+.bg-green-700 { background-color: #15803d; }
+.border-green-200 { border-color: #bbf7d0; }
+
+.bg-orange-50 { background-color: #fff7ed; }
+.bg-orange-100 { background-color: #ffedd5; }
+.bg-orange-200 { background-color: #fed7aa; }
+.bg-orange-500 { background-color: #f97316; }
+.bg-orange-600 { background-color: #ea580c; }
+.bg-orange-700 { background-color: #c2410c; }
+.border-orange-200 { border-color: #fed7aa; }
+
+.bg-blue-50 { background-color: #eff6ff; }
+.bg-blue-100 { background-color: #dbeafe; }
+.bg-blue-200 { background-color: #bfdbfe; }
+.bg-blue-500 { background-color: #3b82f6; }
+.bg-blue-600 { background-color: #2563eb; }
+.bg-blue-700 { background-color: #1d4ed8; }
+.border-blue-200 { border-color: #bfdbfe; }
+
+/* Text colors */
+.text-green-600 { color: #16a34a; }
+.text-orange-600 { color: #ea580c; }
+.text-blue-600 { color: #2563eb; }
+
+.text-green-700 { color: #15803d; }
+.text-orange-700 { color: #c2410c; }
+.text-blue-700 { color: #1d4ed8; }
+
+/* Gradients */
+.from-green-100 { --tw-gradient-from: #dcfce7; }
+.to-green-50 { --tw-gradient-to: #f0fdf4; }
+.from-green-500 { --tw-gradient-from: #22c55e; }
+.to-green-300 { --tw-gradient-to: #86efac; }
+
+.from-orange-100 { --tw-gradient-from: #ffedd5; }
+.to-orange-50 { --tw-gradient-to: #fff7ed; }
+.from-orange-500 { --tw-gradient-from: #f97316; }
+.to-orange-300 { --tw-gradient-to: #fdba74; }
+
+.from-blue-100 { --tw-gradient-from: #dbeafe; }
+.to-blue-50 { --tw-gradient-to: #eff6ff; }
+.from-blue-500 { --tw-gradient-from: #3b82f6; }
+.to-blue-300 { --tw-gradient-to: #93c5fd; }
+
+/* Animations pour les modals */
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-slideIn {
+  animation: slideIn 0.3s ease-out;
+}
+
+.animate-slideUp {
+  animation: slideUp 0.3s ease-out;
+}

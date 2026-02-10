@@ -1,10 +1,11 @@
 import { Swiper, SwiperSlide } from "swiper/react";
+import { useNavigate } from "react-router-dom";
 import "swiper/css";
 import { useCart } from "../../context/CartContext";
 
 export default function ProductsSection() {
   const { addToCart } = useCart();
-console.log("CartContext:", addToCart);
+  const navigate = useNavigate();
 
   const categories = [
     "Toutes les catégories",
@@ -131,10 +132,10 @@ console.log("CartContext:", addToCart);
 
                     <button
                       onClick={() => {
-  addToCart(offer);
-  window.location.href = "/cart";
-}}
-
+                        addToCart(offer);
+                        navigate("/cart");
+                      }}
+                      className="px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700"
                     >
                       Ajouter
                     </button>
@@ -160,7 +161,10 @@ console.log("CartContext:", addToCart);
                   </span>
 
                   <button
-                    onClick={() => addToCart(offer)}
+                    onClick={() => {
+                      addToCart(offer);
+                      navigate("/cart");
+                    }}
                     className="px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700"
                   >
                     Ajouter
