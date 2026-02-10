@@ -10,6 +10,11 @@ import Vision from "./pages/Vision";
 import StoreDetails from "./pages/StoreDetails";
 import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
+import RegisterChoice from "./pages/auth/RegisterChoice";
+import RegisterVendor from "./pages/auth/RegisterVendor";
+
 
 function App() {
   const [activeTab, setActiveTab] = useState("products");
@@ -26,6 +31,11 @@ function App() {
         <Route path="/stores/:id" element={<StoreDetails />} />
         <Route path="/products/:id" element={<ProductDetails />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/register-choice" element={<RegisterChoice />} />
+        <Route path="/register-vendor" element={<RegisterVendor />} />
+
       </Routes>
 
       <Footer />
