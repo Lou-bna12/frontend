@@ -1,5 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+
 import App from "./App";
 import "./index.css";
 
@@ -10,14 +12,16 @@ import { ProductProvider } from "./context/ProductContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <AuthProvider>
-      <NotificationProvider>
-        <CartProvider>
-          <ProductProvider>
-            <App />
-          </ProductProvider>
-        </CartProvider>
-      </NotificationProvider>
-    </AuthProvider>
+    <BrowserRouter>
+      <AuthProvider>
+        <NotificationProvider>
+          <CartProvider>
+            <ProductProvider>
+              <App />
+            </ProductProvider>
+          </CartProvider>
+        </NotificationProvider>
+      </AuthProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );

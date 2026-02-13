@@ -1,9 +1,7 @@
 import { useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
+import { Routes, Route } from "react-router-dom";
 import Header from "./components/header/Header";
 import Footer from "./layouts/Footer";
-
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Vision from "./pages/Vision";
@@ -21,9 +19,8 @@ import Restaurants from "./pages/Restaurants";
 function App() {
   const [activeTab, setActiveTab] = useState("products");
 
-
   return (
-    <Router>
+    <>
       <Header activeTab={activeTab} onChange={setActiveTab} />
 
       <Routes>
@@ -40,10 +37,11 @@ function App() {
         <Route path="/courses" element={<Courses />} />
         <Route path="/restaurants" element={<Restaurants />} />
 
+ 
       </Routes>
 
       <Footer />
-    </Router>
+    </>
   );
 }
 

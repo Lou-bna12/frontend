@@ -6,9 +6,8 @@ import ProductCard from "../components/courses/ProductCard";
 export default function Courses() {
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
 
-  const filteredProducts = products.filter(
-    (p) => p.category === selectedCategory
-  );
+  const filteredProducts = products;
+
 
   return (
     <div className="px-4 py-6">
