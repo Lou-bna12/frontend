@@ -3,26 +3,24 @@ import { useState } from "react";
 import HeaderTabs from "./HeaderTabs";
 import logo from "../../assets/logo.png";
 import {
-  Menu, X, Search, User, Store, Package, Truck,
-  ChefHat, ShoppingBag, Coffee, Home, Car
+  Menu,
+  X,
+  Search,
+  User,
+  Store,
+  Package,
+  Truck,
+  ChefHat,
+  ShoppingBag,
+  Coffee,
+  Home,
+  Car,
 } from "lucide-react";
 
 export default function Header({ activeTab, onChange }) {
   const navigate = useNavigate();
 
-  const [isPartnerDropdownOpen, setIsPartnerDropdownOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
-
-  const partnerCategories = [
-    { Icon: Store, label: "Superette / Épicerie" },
-    { Icon: ShoppingBag, label: "Magasin de vêtements" },
-    { Icon: Package, label: "Magasin électronique" },
-    { Icon: ChefHat, label: "Restaurant / Café" },
-    { Icon: Coffee, label: "Boulangerie / Pâtisserie" },
-    { Icon: Home, label: "Maison & Décoration" },
-    { Icon: Car, label: "Auto & Moto" },
-    { Icon: Truck, label: "Service de livraison" },
-  ];
 
   const profileMenuItems = [
     { label: "Mes Commandes", icon: "📦" },
@@ -38,7 +36,6 @@ export default function Header({ activeTab, onChange }) {
   return (
     <header className="sticky top-0 z-50 bg-white border-b shadow-sm">
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-
         {/* Logo */}
         <Link to="/" onClick={() => onChange("stores")}>
           <img src={logo} alt="ZamZam" className="h-20 w-20" />
@@ -59,8 +56,6 @@ export default function Header({ activeTab, onChange }) {
 
         {/* Actions */}
         <div className="flex gap-3">
-          
-
           <button
             onClick={() => setIsProfileMenuOpen(true)}
             className="flex items-center gap-2 border rounded-full px-4 py-2"
@@ -124,7 +119,7 @@ export default function Header({ activeTab, onChange }) {
               ))}
             </div>
 
-            {/* 👇 AJOUT UNIQUE ICI 👇 */}
+            {/* Devenir partenaire */}
             <div className="p-4 border-t">
               <button
                 onClick={() => {
