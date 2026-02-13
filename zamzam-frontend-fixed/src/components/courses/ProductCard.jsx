@@ -1,4 +1,8 @@
+import { useCart } from "../../context/CartContext";
+
 const ProductCard = ({ product }) => {
+  const { addToCart } = useCart();
+ console.log("addToCart =", addToCart);
   const finalPrice = product.promo
     ? product.price - (product.price * product.discount) / 100
     : product.price;
@@ -6,7 +10,6 @@ const ProductCard = ({ product }) => {
   return (
     <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group relative">
       
-      {/* Image */}
       <div className="relative">
         <img
           src={product.image}
@@ -14,14 +17,12 @@ const ProductCard = ({ product }) => {
           className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
         />
 
-        {/* Badge Promo */}
         {product.promo && (
           <span className="absolute top-3 left-3 bg-red-500 text-white text-xs px-3 py-1 rounded-full font-semibold">
             -{product.discount}%
           </span>
         )}
 
-        {/* Rupture */}
         {!product.stock && (
           <span className="absolute top-3 right-3 bg-gray-800 text-white text-xs px-3 py-1 rounded-full">
             Rupture
@@ -29,7 +30,6 @@ const ProductCard = ({ product }) => {
         )}
       </div>
 
-      {/* Infos */}
       <div className="p-4">
         <h3 className="font-semibold text-lg mb-2">{product.name}</h3>
 
@@ -46,6 +46,7 @@ const ProductCard = ({ product }) => {
           </div>
 
           <button
+            onClick={() => addToCart(product)}
             disabled={!product.stock}
             className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
               product.stock

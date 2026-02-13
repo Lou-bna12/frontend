@@ -15,6 +15,7 @@ import Register from "./pages/auth/Register";
 import RegisterChoice from "./pages/auth/RegisterChoice";
 import RegisterVendor from "./pages/auth/RegisterVendor";
 import Courses from "./pages/Courses";
+import Restaurants from "./pages/Restaurants";
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
         <Route path="/register-choice" element={<RegisterChoice />} />
         <Route path="/register-vendor" element={<RegisterVendor />} />
         <Route path="/courses" element={<Courses />} />
+        <Route path="/restaurants" element={<Restaurants />} />
 
       </Routes>
 
